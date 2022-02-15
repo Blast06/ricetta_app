@@ -1,0 +1,212 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:nb_utils/nb_utils.dart';
+import 'package:recipe_app/components/FixSizedBox.dart';
+import 'package:recipe_app/main.dart';
+import 'package:recipe_app/network/AuthService.dart';
+import 'package:recipe_app/network/RestApis.dart';
+import 'package:recipe_app/screen/DashboardScreen.dart';
+import 'package:recipe_app/screen/DashboardWebScreen.dart';
+import 'package:recipe_app/screen/auth/ForgotPasswordScreen.dart';
+import 'package:recipe_app/screen/auth/SignUpScreen.dart';
+import 'package:recipe_app/utils/Colors.dart';
+import 'package:recipe_app/utils/Constants.dart';
+import 'package:recipe_app/utils/Widgets.dart';
+
+class SignInScreen extends StatefulWidget {
+  @override
+  SignInScreenState createState() => SignInScreenState();
+}
+
+class SignInScreenState extends State<SignInScreen> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passController = TextEditingController();
+
+  FocusNode emailFocus = FocusNode();
+  FocusNode passwordFocus = FocusNode();
+
+  bool mIsDemoUser = false;
+
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
+  void init() async {
+    //
+  }
+
+  void toggleDemoUser() {
+    if (mIsDemoUser) {
+      emailController.text = 'demo@admin.com';
+      passController.text = '12345678';
+    } else {
+      emailController.text = '';
+      passController.text = '';
+    }
+  }
+
+  Future<void> signIn() async {
+    if (formKey.currentState!.validate()) {
+      formKey.currentState!.save();
+
+      appStore.setLoading(true);
+
+      Map req = {
+        'email': emailController.text,
+        'password': passController.text,
+        "login_type": LoginTypeApp,
+      };
+
+      await logInApi(req).then((value) async {
+        appStore.setLoading(false);
+
+        if (isWeb) {
+          DashboardWebScreen().launch(context, isNewTask: true);
+        } else {
+          DashboardScreen().launch(context, isNewTask: true);
+        }
+
+        appStore.setLogin(true);
+      }).catchError((e) {
+        appStore.setLoading(false);
+
+        toast(e.toString());
+      });
+    }
+  }
+
+  @override
+  void setState(fn) {
+    if (mounted) super.setState(fn);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: [
+          Form(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            key: formKey,
+            child: FixSizedBox(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.only(top: 40, bottom: 50),
+                child: Column(
+                  children: [
+                    Stack(
+                      children: [
+                        commonCachedNetworkImage(appStore.isDarkMode ? loginBGImage1 : loginBGImage, height: 250, width: context.width(), fit: BoxFit.cover),
+                        commonCachedNetworkImage(appStore.isDarkMode ? loginImage : loginImage1, height: 150, width: context.width(), fit: BoxFit.contain),
+                      ],
+                    ),
+                    16.height,
+                    Text(language!.loginToYourAccount, style: boldTextStyle()),
+                    16.height,
+                    Column(
+                      children: [
+                        Column(
+                          children: [
+                            AppTextField(
+                              controller: emailController,
+                              focus: emailFocus,
+                              nextFocus: passwordFocus,
+                              textFieldType: TextFieldType.EMAIL,
+                              textInputAction: TextInputAction.next,
+                              errorThisFieldRequired: language!.thisFieldIsRequired,
+                              decoration: inputDecorationRecipe(labelTextName: language!.email),
+                            ),
+                            16.height,
+                            AppTextField(
+                              controller: passController,
+                              focus: passwordFocus,
+                              textFieldType: TextFieldType.PASSWORD,
+                              errorMinimumPasswordLength: language!.passwordLengthShouldBeMoreThan,
+                              textInputAction: TextInputAction.done,
+                              errorThisFieldRequired: language!.thisFieldIsRequired,
+                              decoration: inputDecorationRecipe(labelTextName: language!.password),
+                              onFieldSubmitted: (val) {
+                                hideKeyboard(context);
+                                signIn();
+                              },
+                            ),
+                          ],
+                        ).paddingSymmetric(horizontal: 16),
+                        16.height,
+                        CheckboxListTile(
+                          value: mIsDemoUser,
+                          onChanged: (v) {
+                            mIsDemoUser = !mIsDemoUser;
+                            setState(() {});
+
+                            toggleDemoUser();
+                          },
+                          title: Text(language!.loginWithAdminDemo, style: secondaryTextStyle()),
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            child: Text('Forgot Password?', style: boldTextStyle(color: primaryColor)),
+                            onPressed: () {
+                              ForgotPasswordScreen().launch(context);
+                            },
+                          ),
+                        ).paddingOnly(right: 16),
+                        AppButton(
+                          shapeBorder: RoundedRectangleBorder(borderRadius: radius(10)),
+                          color: primaryColor,
+                          width: context.width(),
+                          onTap: () {
+                            signIn();
+                          },
+                          text: language!.signIn,
+                          textStyle: boldTextStyle(color: white),
+                        ).paddingSymmetric(horizontal: 16),
+                        16.height,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(language!.alreadyHaveAnAccount, style: secondaryTextStyle()),
+                            4.width,
+                            TextButton(
+                              onPressed: () {
+                                SignUpScreen().launch(context);
+                              },
+                              child: Text(language!.signUp, style: boldTextStyle(color: context.primaryColor)),
+                            )
+                          ],
+                        ),
+                        Text(language!.orLoginWithGoogle, style: secondaryTextStyle()).center(),
+                        8.height,
+                        if (isMobile)
+                          AppButton(
+                            elevation: 0.5,
+                            onTap: () async {
+                              appStore.setLoading(true);
+
+                              await signInWithGoogle().then((value) {
+                                DashboardScreen().launch(context, isNewTask: true);
+                                appStore.setLoading(false);
+                              }).catchError((e) {
+                                appStore.setLoading(false);
+                                toast(e.toString());
+                              });
+                            },
+                            child: GoogleLogoWidget(),
+                          ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ).center(),
+          ),
+          Observer(builder: (_) => Loader().visible(appStore.isLoader)),
+        ],
+      ),
+    );
+  }
+}
