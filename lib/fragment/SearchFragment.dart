@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:recipe_app/components/EmptyWidget.dart';
@@ -9,7 +10,8 @@ import 'package:recipe_app/main.dart';
 import 'package:recipe_app/models/RecipeModel.dart';
 import 'package:recipe_app/network/RestApis.dart';
 import 'package:recipe_app/screen/auth/SignInScreen.dart';
-import 'package:recipe_app/screen/recipe/RecipeDetailScreen.dart';
+import 'package:recipe_app/screen/recipe/RecipeDetailMobileScreen.dart';
+import 'package:recipe_app/screen/recipe/RecipeDetailWebScreen.dart';
 import 'package:recipe_app/utils/Colors.dart';
 import 'package:recipe_app/utils/Common.dart';
 import 'package:recipe_app/utils/Constants.dart';
@@ -136,76 +138,74 @@ class SearchFragmentState extends State<SearchFragment> {
         ),
         body: Stack(
           children: [
-            SingleChildScrollView(
-              controller: scrollController,
-              padding: EdgeInsets.symmetric(vertical: 22, horizontal: 16),
-              child: Column(
-                children: [
-                  recipeSearch.isNotEmpty
-                      ? Wrap(
-                          runSpacing: 16,
-                          spacing: 16,
-                          children: recipeSearch.validate().map((e) {
-                            return RecipeComponentWidget(
-                              recipeModel: e,
-                              spanCount: widget.spanCount,
-                              widgetData: IconButton(
-                                padding: EdgeInsets.only(bottom: 16),
-                                icon: Icon(
-                                  e.is_bookmark == 0 ? Icons.bookmark_border_rounded : Icons.bookmark,
-                                  color: black,
-                                  size: 20,
-                                ),
-                                visualDensity: VisualDensity.compact,
-                                onPressed: () async {
-                                  if (appStore.isDemoAdmin) {
-                                    snackBar(context, title: language!.demoUserMsg);
+            recipeSearch.isNotEmpty
+                ? SingleChildScrollView(
+                    controller: scrollController,
+                    padding: EdgeInsets.symmetric(vertical: 22, horizontal: 16),
+                    child: Wrap(
+                      runSpacing: 16,
+                      spacing: 16,
+                      children: recipeSearch.validate().map((e) {
+                        return RecipeComponentWidget(
+                          recipeModel: e,
+                          spanCount: widget.spanCount,
+                          widgetData: IconButton(
+                            padding: EdgeInsets.only(bottom: 16),
+                            icon: Icon(
+                              e.is_bookmark == 0 ? Icons.bookmark_border_rounded : Icons.bookmark,
+                              color: black,
+                              size: 20,
+                            ),
+                            visualDensity: VisualDensity.compact,
+                            onPressed: () async {
+                              if (appStore.isDemoAdmin) {
+                                snackBar(context, title: language!.demoUserMsg);
+                              } else {
+                                if (!getBoolAsync(IS_LOGGED_IN)) {
+                                  SignInScreen().launch(context);
+                                } else {
+                                  if (e.is_bookmark.validate() == 0) {
+                                    e.is_bookmark = 1;
                                   } else {
-                                    if (!getBoolAsync(IS_LOGGED_IN)) {
-                                      SignInScreen().launch(context);
-                                    } else {
-                                      if (e.is_bookmark.validate() == 0) {
-                                        e.is_bookmark = 1;
-                                      } else {
-                                        e.is_bookmark = 0;
-                                      }
-                                      setState(() {});
-
-                                      addBookMarkData(e.id!, context, e.is_bookmark!).then((value) {
-                                        LiveStream().emit(streamRefreshBookMark, streamRefreshBookMark);
-                                      }).catchError((error) {
-                                        if (e.is_bookmark == 0) {
-                                          e.is_bookmark = 1;
-                                        } else {
-                                          e.is_bookmark = 0;
-                                        }
-
-                                        setState(() {});
-                                        toast(error.toString());
-                                      });
-                                    }
+                                    e.is_bookmark = 0;
                                   }
-                                },
-                              ).visible(!appStore.isAdmin && !appStore.isDemoAdmin),
-                            ).onTap(() async {
-                              hideKeyboard(context);
-                              RecipeModel? res = await RecipeDetailScreen(recipeID: e.id, recipe: e).launch(context, pageRouteAnimation: PageRouteAnimation.Slide);
-                              if (res != null && res is RecipeModel) {
-                                e = res;
-                                setState(() {});
+                                  setState(() {});
+
+                                  addBookMarkData(e.id!, context, e.is_bookmark!).then((value) {
+                                    LiveStream().emit(streamRefreshBookMark, streamRefreshBookMark);
+                                  }).catchError((error) {
+                                    if (e.is_bookmark == 0) {
+                                      e.is_bookmark = 1;
+                                    } else {
+                                      e.is_bookmark = 0;
+                                    }
+
+                                    setState(() {});
+                                    toast(error.toString());
+                                  });
+                                }
                               }
-                            });
-                          }).toList(),
-                        ).center()
-                      : Container(
-                          alignment: Alignment.center,
-                          width: context.width(),
-                          height: context.height() * 0.6,
-                          child: EmptyWidget(title: language!.noDataFound).visible(!mISLoading),
-                        )
-                ],
-              ),
-            ),
+                            },
+                          ).visible(!appStore.isAdmin && !appStore.isDemoAdmin),
+                        ).onTap(() async {
+                          hideKeyboard(context);
+                          RecipeModel? res = kIsWeb
+                              ? await RecipeDetailWebScreen(recipeID: e.id, recipe: e).launch(context, pageRouteAnimation: PageRouteAnimation.Slide)
+                              : await RecipeDetailMobileScreen(recipeID: e.id, recipe: e).launch(context, pageRouteAnimation: PageRouteAnimation.Slide);
+                          if (res != null) {
+                            e = res;
+                            setState(() {});
+                          }
+                        });
+                      }).toList(),
+                    ).center(),
+                  )
+                : Container(
+                    alignment: Alignment.center,
+                    width: context.width(),
+                    height: context.height() - kToolbarHeight,
+                    child: EmptyWidget(title: language!.noDataFound).visible(!mISLoading),
+                  ),
             Loader().visible(mISLoading)
           ],
         ),

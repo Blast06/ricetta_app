@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
@@ -109,11 +110,15 @@ class EditProfileScreenState extends State<EditProfileScreen> {
     DateTime? time = await showDatePicker(
         context: context,
         initialDate: userDateOfBirth,
-        firstDate: DateTime(DateTime.now().year - 5),
-        lastDate: DateTime(DateTime.now().year + 5)
+        firstDate: DateTime(DateTime
+            .now()
+            .year - 5),
+        lastDate: DateTime(DateTime
+            .now()
+            .year + 5)
         builder: (BuildContext context, Widget ? child)
     {
-    return Theme(data: appStore.isDarkMode ? ThemeData.dark() : ThemeData.light(), child: child!)
+      return Theme(data: appStore.isDarkMode ? ThemeData.dark() : ThemeData.light(), child: child!)
     });
     if (time != null) {
     setState(() {
@@ -150,13 +155,16 @@ class EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget(language!.editProfile, elevation: 0),
+      appBar: kIsWeb ? null : appBarWidget(language!.editProfile, elevation: 0),
       body: FixSizedBox(
+        maxWidth: kIsWeb ? null : context.width(),
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(vertical: 32, horizontal: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if(kIsWeb)
+                ...[Text(language!.editProfile, style: boldTextStyle(size: 24)).paddingBottom(16), Divider(), 16.height],
               Stack(
                 children: [
                   isWeb ? recipeImageWidget() : profileImage(),
@@ -217,7 +225,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
               ),
               16.height,
               Text(language!.gender, style: primaryTextStyle()),
-              Row(
+              Column(
                   children: name.map((e) {
                     return ListTile(
                       title: Text(e, style: primaryTextStyle()),
@@ -229,7 +237,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                         value: name[name.indexOf(e)],
                         groupValue: gender,
                       ),
-                    ).expand();
+                    );
                   }).toList()),
               16.height,
               AppButton(

@@ -38,7 +38,7 @@ List<AppModel> getSettingData() {
   list.add(AppModel(name: language!.selectTheme, icon: MaterialCommunityIcons.theme_light_dark));
   list.add(AppModel(name: language!.language, icon: FontAwesome.language));
   list.add(AppModel(name: language!.adminSetting, icon: Icons.admin_panel_settings_outlined, widget: AdminSettingScreen()));
-  list.add(AppModel(name: language!.changePassword, icon: Icons.vpn_key_outlined, widget: ChangePasswordScreen()));
+  list.add(AppModel(name: language!.changePassword, icon: Icons.vpn_key_outlined));
   list.add(AppModel(name: language!.privacyPolicy, icon: Icons.assignment_outlined));
   list.add(AppModel(name: language!.helpSupport, icon: Icons.support_rounded));
   list.add(AppModel(name: language!.about, icon: Icons.info_outline, widget: AboutAppScreen()));

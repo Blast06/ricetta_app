@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -77,115 +78,134 @@ class SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Form(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            key: formKey,
-            child: FixSizedBox(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.only(top: 40, bottom: 30),
-                child: Column(
-                  children: [
-                    Stack(
-                      children: [
-                        commonCachedNetworkImage(appStore.isDarkMode ? loginBGImage1 : loginBGImage, height: context.height() * 0.35, width: context.width(), fit: BoxFit.cover),
-                        commonCachedNetworkImage(appStore.isDarkMode ? loginImage : loginImage1, height: context.height() * 0.29, width: context.width(), fit: BoxFit.contain),
-                      ],
+    return ScrollConfiguration(
+      behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+      child: WillPopScope(
+        onWillPop: () async => true,
+        child: Scaffold(
+          body: Stack(
+            children: [
+              Form(
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                key: formKey,
+                child: FixSizedBox(
+                  maxWidth: kIsWeb ? 500 : context.width(),
+                  child: Container(
+                    margin: EdgeInsets.symmetric(vertical: kIsWeb ? 32 : 0),
+                    decoration: kIsWeb
+                        ? BoxDecoration(
+                            color: context.cardColor,
+                            borderRadius: BorderRadius.circular(defaultRadius),
+                            boxShadow: [
+                              BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 8.0, spreadRadius: 3.0),
+                            ],
+                          )
+                        : null,
+                    child: SingleChildScrollView(
+                      padding: EdgeInsets.only(top: 16, bottom: 24),
+                      child: Column(
+                        children: [
+                          Stack(
+                            children: [
+                              commonCachedNetworkImage(appStore.isDarkMode ? loginBGImage1 : loginBGImage, height: context.height() * 0.35, width: context.width(), fit: BoxFit.cover),
+                              commonCachedNetworkImage(appStore.isDarkMode ? loginImage : loginImage1, height: context.height() * 0.29, width: context.width(), fit: BoxFit.contain),
+                            ],
+                          ),
+                          16.height,
+                          Column(
+                            children: [
+                              Text(language!.signUpToYourAccount, style: boldTextStyle()),
+                              AppTextField(
+                                controller: usernameController,
+                                focus: userNameFocus,
+                                nextFocus: userFullNameFocus,
+                                textFieldType: TextFieldType.USERNAME,
+                                errorThisFieldRequired: language!.thisFieldIsRequired,
+                                decoration: inputDecorationRecipe(labelTextName: language!.userName),
+                              ),
+                              16.height,
+                              AppTextField(
+                                controller: nameController,
+                                focus: userFullNameFocus,
+                                nextFocus: emailFocus,
+                                textFieldType: TextFieldType.NAME,
+                                errorThisFieldRequired: language!.thisFieldIsRequired,
+                                decoration: inputDecorationRecipe(labelTextName: language!.fullName),
+                              ),
+                              16.height,
+                              AppTextField(
+                                controller: emailController,
+                                focus: emailFocus,
+                                nextFocus: passwordFocus,
+                                textFieldType: TextFieldType.EMAIL,
+                                errorThisFieldRequired: language!.thisFieldIsRequired,
+                                decoration: inputDecorationRecipe(labelTextName: language!.email),
+                              ),
+                              16.height,
+                              AppTextField(
+                                controller: passWordController,
+                                focus: passwordFocus,
+                                nextFocus: confirmPasswordFocus,
+                                textFieldType: TextFieldType.PASSWORD,
+                                errorThisFieldRequired: language!.thisFieldIsRequired,
+                                errorMinimumPasswordLength: language!.passwordLengthShouldBeMoreThan,
+                                decoration: inputDecorationRecipe(labelTextName: language!.password),
+                                onFieldSubmitted: (val) {
+                                  //
+                                },
+                              ),
+                              16.height,
+                              AppTextField(
+                                controller: confirmPassController,
+                                focus: confirmPasswordFocus,
+                                textFieldType: TextFieldType.PASSWORD,
+                                errorMinimumPasswordLength: language!.passwordLengthShouldBeMoreThan,
+                                decoration: inputDecorationRecipe(labelTextName: language!.confirmPassword),
+                                validator: (val) {
+                                  if (val!.isEmpty) return language!.thisFieldIsRequired;
+                                  if (val != passWordController.text) return language!.passwordDoesNotMatch;
+                                },
+                                onFieldSubmitted: (s) {
+                                  submit();
+                                },
+                              ),
+                              32.height,
+                              AppButton(
+                                shapeBorder: RoundedRectangleBorder(borderRadius: radius(10)),
+                                color: primaryColor,
+                                width: context.width(),
+                                onTap: () {
+                                  submit();
+                                },
+                                text: language!.signUp,
+                                textStyle: boldTextStyle(color: white),
+                              ),
+                              8.height,
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(language!.alreadyHaveAnAccount, style: secondaryTextStyle()),
+                                  4.width,
+                                  TextButton(
+                                    onPressed: () {
+                                      finish(context);
+                                    },
+                                    child: Text(language!.signIn, style: boldTextStyle(color: context.primaryColor)),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ).paddingOnly(left: 16, right: 16, bottom: kIsWeb ? 16 : 0)
+                        ],
+                      ),
                     ),
-                    16.height,
-                    Column(
-                      children: [
-                        Text(language!.signUpToYourAccount, style: boldTextStyle()),
-                        AppTextField(
-                          controller: usernameController,
-                          focus: userNameFocus,
-                          nextFocus: userFullNameFocus,
-                          textFieldType: TextFieldType.USERNAME,
-                          errorThisFieldRequired: language!.thisFieldIsRequired,
-                          decoration: inputDecorationRecipe(labelTextName: language!.userName),
-                        ),
-                        16.height,
-                        AppTextField(
-                          controller: nameController,
-                          focus: userFullNameFocus,
-                          nextFocus: emailFocus,
-                          textFieldType: TextFieldType.NAME,
-                          errorThisFieldRequired: language!.thisFieldIsRequired,
-                          decoration: inputDecorationRecipe(labelTextName: language!.fullName),
-                        ),
-                        16.height,
-                        AppTextField(
-                          controller: emailController,
-                          focus: emailFocus,
-                          nextFocus: passwordFocus,
-                          textFieldType: TextFieldType.EMAIL,
-                          errorThisFieldRequired: language!.thisFieldIsRequired,
-                          decoration: inputDecorationRecipe(labelTextName: language!.email),
-                        ),
-                        16.height,
-                        AppTextField(
-                          controller: passWordController,
-                          focus: passwordFocus,
-                          nextFocus: confirmPasswordFocus,
-                          textFieldType: TextFieldType.PASSWORD,
-                          errorThisFieldRequired: language!.thisFieldIsRequired,
-                          errorMinimumPasswordLength: language!.passwordLengthShouldBeMoreThan,
-                          decoration: inputDecorationRecipe(labelTextName: language!.password),
-                          onFieldSubmitted: (val) {
-                            //
-                          },
-                        ),
-                        16.height,
-                        AppTextField(
-                          controller: confirmPassController,
-                          focus: confirmPasswordFocus,
-                          textFieldType: TextFieldType.PASSWORD,
-                          errorMinimumPasswordLength: language!.passwordLengthShouldBeMoreThan,
-                          decoration: inputDecorationRecipe(labelTextName: language!.confirmPassword),
-                          validator: (val) {
-                            if (val!.isEmpty) return language!.thisFieldIsRequired;
-                            if (val != passWordController.text) return language!.passwordDoesNotMatch;
-                          },
-                          onFieldSubmitted: (s) {
-                            submit();
-                          },
-                        ),
-                        32.height,
-                        AppButton(
-                          shapeBorder: RoundedRectangleBorder(borderRadius: radius(10)),
-                          color: primaryColor,
-                          width: context.width(),
-                          onTap: () {
-                            submit();
-                          },
-                          text: language!.signUp,
-                          textStyle: boldTextStyle(color: white),
-                        ),
-                        8.height,
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(language!.alreadyHaveAnAccount, style: secondaryTextStyle()),
-                            4.width,
-                            TextButton(
-                              onPressed: () {
-                                finish(context);
-                              },
-                              child: Text(language!.signIn, style: boldTextStyle(color: context.primaryColor)),
-                            )
-                          ],
-                        ),
-                      ],
-                    ).paddingOnly(left: 16, right: 16)
-                  ],
-                ),
+                  ),
+                ).center(),
               ),
-            ),
+              Observer(builder: (_) => Loader().visible(appStore.isLoader)),
+            ],
           ),
-          Observer(builder: (_) => Loader().visible(appStore.isLoader)),
-        ],
+        ),
       ),
     );
   }

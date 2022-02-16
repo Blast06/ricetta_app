@@ -56,6 +56,7 @@ class SliderWidgetState extends State<SliderWidget> {
                     data.slider_image.validate(),
                     fit: BoxFit.cover,
                     width: context.width(),
+                    isScaled: false,
                   ),
                   Positioned(
                     top: 16,

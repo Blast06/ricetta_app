@@ -71,7 +71,7 @@ class LanguageEn extends BaseLanguage {
   String get emptySliderData => 'Empty Slider Data';
 
   @override
-  String get areYouSureRemoveThisSlider => 'Are you Sure you want to remove this Slider?';
+  String get areYouSureRemoveThisSlider => 'Do you want to remove this Slider?';
 
   @override
   String get sliderRemove => 'Slider  Remove successfully';
@@ -137,7 +137,7 @@ class LanguageEn extends BaseLanguage {
   String get edit => 'Edit';
 
   @override
-  String get deleteThisRecipe => 'Are you sure to delete this recipe?';
+  String get deleteThisRecipe => 'Do you want to delete this recipe?';
 
   @override
   String get deletedRecipeSuccessfully => 'Recipe has been deleted successfully';
@@ -158,7 +158,7 @@ class LanguageEn extends BaseLanguage {
   String get shoppingListTodo => 'Shopping Todo List';
 
   @override
-  String get removeThisRecipe => 'Are you Sure you want to remove this recipe?';
+  String get removeThisRecipe => 'Do you want to remove this recipe?';
 
   @override
   String get eg52 => 'e.g 52';
@@ -536,7 +536,7 @@ class LanguageEn extends BaseLanguage {
   String get addAStep => 'Add a step';
 
   @override
-  String get recipePublish => 'Are you sure you want to publish this recipe?';
+  String get recipePublish => 'Do you want to publish this recipe?';
 
   @override
   String get publish => 'Publish';
@@ -548,10 +548,10 @@ class LanguageEn extends BaseLanguage {
   String get stepPhoto => 'STEP PHOTO';
 
   @override
-  String get deleteThisIngredient => 'Are you sure you want to delete this Ingredient?';
+  String get deleteThisIngredient => 'Do you want to delete this Ingredient?';
 
   @override
-  String get deleteThisStep => 'Are you sure you want to delete this Step??';
+  String get deleteThisStep => 'Do you want to delete this Step??';
 
   @override
   String get deleteThisRecipeStep => 'Recipe Step has been deleted successfully';
@@ -584,7 +584,7 @@ class LanguageEn extends BaseLanguage {
   String get addUtensil => 'Add Utensil';
 
   @override
-  String get deleteUtensil => 'Are you sure you want to delete this Utensil??';
+  String get deleteUtensil => 'Do you want to delete this Utensil?';
 
   @override
   String get demoUserMsg => 'Tester role not allowed to perform this action';
@@ -608,5 +608,5 @@ class LanguageEn extends BaseLanguage {
   String get addRecipe => 'Add Recipe';
 
   @override
-  String get unpublishedThisRecipe => 'Are you sure you want to unPublish this recipe?';
+  String get unpublishedThisRecipe => 'Do you want to unPublish this recipe?';
 }

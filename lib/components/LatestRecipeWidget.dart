@@ -1,10 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:recipe_app/components/RecipeComponentWidget.dart';
 import 'package:recipe_app/main.dart';
 import 'package:recipe_app/models/RecipeModel.dart';
 import 'package:recipe_app/screen/auth/SignInScreen.dart';
-import 'package:recipe_app/screen/recipe/RecipeDetailScreen.dart';
+import 'package:recipe_app/screen/recipe/RecipeDetailMobileScreen.dart';
+import 'package:recipe_app/screen/recipe/RecipeDetailWebScreen.dart';
 import 'package:recipe_app/utils/Colors.dart';
 import 'package:recipe_app/utils/Common.dart';
 import 'package:recipe_app/utils/Constants.dart';
@@ -88,8 +90,10 @@ class LatestRecipeWidgetState extends State<LatestRecipeWidget> {
             },
           ).visible(!appStore.isAdmin && !appStore.isDemoAdmin),
         ).onTap(() async {
-          RecipeModel? res = await RecipeDetailScreen(recipeID: e.id, recipe: e).launch(context, pageRouteAnimation: PageRouteAnimation.Slide);
-          if (res != null && res is RecipeModel) {
+          RecipeModel? res = kIsWeb
+              ? await RecipeDetailWebScreen(recipeID: e.id, recipe: e).launch(context, pageRouteAnimation: PageRouteAnimation.Slide)
+              : await RecipeDetailMobileScreen(recipeID: e.id, recipe: e).launch(context, pageRouteAnimation: PageRouteAnimation.Slide);
+          if (res != null) {
             e = res;
             setState(() {});
           }

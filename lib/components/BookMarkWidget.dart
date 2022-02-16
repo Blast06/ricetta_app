@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:recipe_app/components/EmptyWidget.dart';
@@ -7,7 +8,8 @@ import 'package:recipe_app/main.dart';
 import 'package:recipe_app/models/RecipeModel.dart';
 import 'package:recipe_app/network/RestApis.dart';
 import 'package:recipe_app/screen/auth/SignInScreen.dart';
-import 'package:recipe_app/screen/recipe/RecipeDetailScreen.dart';
+import 'package:recipe_app/screen/recipe/RecipeDetailMobileScreen.dart';
+import 'package:recipe_app/screen/recipe/RecipeDetailWebScreen.dart';
 import 'package:recipe_app/utils/Common.dart';
 import 'package:recipe_app/utils/Constants.dart';
 
@@ -177,7 +179,9 @@ class BookMarkWidgetState extends State<BookMarkWidget> {
                         ],
                       ),
                     ).onTap(() async {
-                      await RecipeDetailScreen(recipeID: e.id).launch(context, pageRouteAnimation: PageRouteAnimation.Slide);
+                      kIsWeb
+                          ? await RecipeDetailWebScreen(recipeID: e.id).launch(context, pageRouteAnimation: PageRouteAnimation.Slide)
+                          : await RecipeDetailMobileScreen(recipeID: e.id).launch(context, pageRouteAnimation: PageRouteAnimation.Slide);
                       init();
                     });
                   }).toList(),

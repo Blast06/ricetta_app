@@ -2,10 +2,12 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:recipe_app/components/ScaleImageWidget.dart';
 import 'package:recipe_app/main.dart';
 import 'package:recipe_app/utils/Colors.dart';
 
@@ -30,24 +32,43 @@ Widget commonCachedNetworkImage(
   AlignmentGeometry? alignment,
   bool usePlaceholderIfUrlEmpty = true,
   double? radius,
+  bool? isScaled = true,
 }) {
   if (url.validate().isEmpty) {
     return placeHolderWidget(height: height, width: width, fit: fit, alignment: alignment, radius: radius);
   } else if (url.validate().startsWith('http')) {
-    return CachedNetworkImage(
-      imageUrl: url!,
-      height: height,
-      width: width,
-      fit: fit,
-      alignment: alignment as Alignment? ?? Alignment.center,
-      errorWidget: (_, s, d) {
-        return placeHolderWidget(height: height, width: width, fit: fit, alignment: alignment, radius: radius);
-      },
-      placeholder: (_, s) {
-        if (!usePlaceholderIfUrlEmpty) return SizedBox();
-        return placeHolderWidget(height: height, width: width, fit: fit, alignment: alignment, radius: radius);
-      },
-    );
+    return kIsWeb
+        ? ScaleImageWidget(
+            height: height,
+            width: width,
+            isScaleImage: isScaled,
+            child: CachedNetworkImage(
+              imageUrl: url!,
+              fit: fit,
+              alignment: alignment as Alignment? ?? Alignment.center,
+              errorWidget: (_, s, d) {
+                return placeHolderWidget(height: height, width: width, fit: fit, alignment: alignment, radius: radius);
+              },
+              placeholder: (_, s) {
+                if (!usePlaceholderIfUrlEmpty) return SizedBox();
+                return placeHolderWidget(height: height, width: width, fit: fit, alignment: alignment, radius: radius);
+              },
+            ),
+          )
+        : CachedNetworkImage(
+            imageUrl: url!,
+            fit: fit,
+            height: height,
+            width: width,
+            alignment: alignment as Alignment? ?? Alignment.center,
+            errorWidget: (_, s, d) {
+              return placeHolderWidget(height: height, width: width, fit: fit, alignment: alignment, radius: radius);
+            },
+            placeholder: (_, s) {
+              if (!usePlaceholderIfUrlEmpty) return SizedBox();
+              return placeHolderWidget(height: height, width: width, fit: fit, alignment: alignment, radius: radius);
+            },
+          );
   } else {
     return Image.asset(url!, height: height, width: width, fit: fit, alignment: alignment ?? Alignment.center).cornerRadiusWithClipRRect(radius ?? defaultRadius);
   }

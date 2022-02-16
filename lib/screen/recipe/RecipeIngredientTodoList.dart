@@ -39,24 +39,27 @@ class RecipeIngredientTodoListState extends State<RecipeIngredientTodoList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget(language!.shoppingListTodo, actions: [
-        IconButton(
-          onPressed: () async {
-            await showConfirmDialogCustom(
-              context,
-              primaryColor: primaryColor,
-              dialogType: DialogType.DELETE,
-              title: language!.removeThisRecipe,
-              onAccept: (c) async {
-                await removeRecipeById(widget.recipeId!);
+      appBar: appBarWidget(
+        language!.shoppingListTodo,
+        actions: [
+          IconButton(
+            onPressed: () async {
+              await showConfirmDialogCustom(
+                context,
+                primaryColor: primaryColor,
+                dialogType: DialogType.DELETE,
+                title: language!.removeThisRecipe,
+                onAccept: (c) async {
+                  await removeRecipeById(widget.recipeId!);
 
-                finish(context);
-              },
-            );
-          },
-          icon: Icon(Icons.delete, color: context.iconColor),
-        )
-      ]),
+                  finish(context);
+                },
+              );
+            },
+            icon: Icon(Icons.delete, color: context.iconColor),
+          )
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -84,10 +87,12 @@ class RecipeIngredientTodoListState extends State<RecipeIngredientTodoList> {
                     PhotoViewScreen(img: widget.recipeImg).launch(context);
                   }),
                 ),
-                Text(
-                  widget.recipeTitle.validate(),
-                  style: boldTextStyle(size: 22, color: whiteColor),
-                ).paddingOnly(left: 8, right: 8),
+                Positioned(
+                  left: 16,
+                  right: 16,
+                  bottom: 16,
+                  child: Text(widget.recipeTitle.validate(), style: boldTextStyle(size: 22, color: whiteColor)),
+                ),
               ],
             ),
             FutureBuilder<List<IngredientsDBModel>>(
@@ -130,7 +135,7 @@ class RecipeIngredientTodoListState extends State<RecipeIngredientTodoList> {
                           setState(() {});
                         });
                       },
-                      separatorBuilder: (_, index) => Divider(thickness: 1, height: 0, indent: 40),
+                      separatorBuilder: (_, index) => Divider(indent: 40,height: 0),
                     );
                   }
                 }

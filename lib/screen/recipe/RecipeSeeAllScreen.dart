@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -6,7 +7,8 @@ import 'package:recipe_app/components/RecipeComponentWidget.dart';
 import 'package:recipe_app/models/RecipeModel.dart';
 import 'package:recipe_app/network/RestApis.dart';
 import 'package:recipe_app/screen/auth/SignInScreen.dart';
-import 'package:recipe_app/screen/recipe/RecipeDetailScreen.dart';
+import 'package:recipe_app/screen/recipe/RecipeDetailMobileScreen.dart';
+import 'package:recipe_app/screen/recipe/RecipeDetailWebScreen.dart';
 import 'package:recipe_app/utils/Common.dart';
 import 'package:recipe_app/utils/Constants.dart';
 
@@ -89,7 +91,7 @@ class RecipeSeeAllScreenState extends State<RecipeSeeAllScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget(language!.latestRecipes, elevation: 0),
+      appBar: kIsWeb ? null : appBarWidget(language!.latestRecipes),
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -140,8 +142,10 @@ class RecipeSeeAllScreenState extends State<RecipeSeeAllScreen> {
                               },
                             ).visible(appStore.isAdmin && appStore.isDemoAdmin),
                           ).onTap(() async {
-                            RecipeModel? res = await RecipeDetailScreen(recipeID: e.id, recipe: e).launch(context, pageRouteAnimation: PageRouteAnimation.Slide);
-                            if (res != null && res is RecipeModel) {
+                            RecipeModel? res = kIsWeb
+                                ? await RecipeDetailWebScreen(recipeID: e.id, recipe: e).launch(context, pageRouteAnimation: PageRouteAnimation.Slide)
+                                : await RecipeDetailMobileScreen(recipeID: e.id, recipe: e).launch(context, pageRouteAnimation: PageRouteAnimation.Slide);
+                            if (res != null) {
                               e = res;
                               setState(() {});
                             }
@@ -190,8 +194,10 @@ class RecipeSeeAllScreenState extends State<RecipeSeeAllScreen> {
                               },
                             ).visible(!appStore.isAdmin && !appStore.isDemoAdmin),
                           ).onTap(() async {
-                            RecipeModel? res = await RecipeDetailScreen(recipeID: e.id, recipe: e).launch(context, pageRouteAnimation: PageRouteAnimation.Slide);
-                            if (res != null && res is RecipeModel) {
+                            RecipeModel? res = kIsWeb
+                                ? await RecipeDetailWebScreen(recipeID: e.id, recipe: e).launch(context, pageRouteAnimation: PageRouteAnimation.Slide)
+                                : await RecipeDetailMobileScreen(recipeID: e.id, recipe: e).launch(context, pageRouteAnimation: PageRouteAnimation.Slide);
+                            if (res != null) {
                               e = res;
                               setState(() {});
                             }
@@ -240,8 +246,10 @@ class RecipeSeeAllScreenState extends State<RecipeSeeAllScreen> {
                               },
                             ).visible(appStore.isAdmin && appStore.isDemoAdmin),
                           ).onTap(() async {
-                            RecipeModel? res = await RecipeDetailScreen(recipeID: e.id, recipe: e).launch(context, pageRouteAnimation: PageRouteAnimation.Slide);
-                            if (res != null && res is RecipeModel) {
+                            RecipeModel? res = kIsWeb
+                                ? await RecipeDetailWebScreen(recipeID: e.id, recipe: e).launch(context, pageRouteAnimation: PageRouteAnimation.Slide)
+                                : await RecipeDetailMobileScreen(recipeID: e.id, recipe: e).launch(context, pageRouteAnimation: PageRouteAnimation.Slide);
+                            if (res != null) {
                               e = res;
                               setState(() {});
                             }

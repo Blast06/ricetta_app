@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:recipe_app/database/DatabaseHelper.dart';
@@ -29,7 +29,7 @@ class SplashScreenState extends State<SplashScreen> {
     }
     await Future.delayed(Duration(seconds: 2));
 
-    if (getBoolAsync(IS_FIRST_TIME, defaultValue: true)) {
+    if (getBoolAsync(IS_FIRST_TIME, defaultValue: true) && isMobile) {
       WalkThroughScreen().launch(context, isNewTask: true);
     } else {
       if (isWeb) {

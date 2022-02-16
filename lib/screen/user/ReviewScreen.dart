@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -78,15 +79,16 @@ class ReviewScreenState extends State<ReviewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget(language!.review),
+      appBar: kIsWeb ? null : appBarWidget(language!.review),
       body: Stack(
         children: [
           SingleChildScrollView(
             padding: EdgeInsets.symmetric(vertical: 32, horizontal: 16),
             child: FixSizedBox(
+              maxWidth: kIsWeb ? null : context.width(),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                  if (kIsWeb) Text(language!.review, style: boldTextStyle(size: 24)).paddingBottom(16),
                   Stack(
                     alignment: Alignment.bottomCenter,
                     children: [
@@ -122,7 +124,7 @@ class ReviewScreenState extends State<ReviewScreen> {
                   16.height,
                   Text(language!.recipeReview, style: boldTextStyle()),
                   8.height,
-                  Divider(color: grey),
+                  Divider(),
                   8.height,
                   Container(
                     width: 50,

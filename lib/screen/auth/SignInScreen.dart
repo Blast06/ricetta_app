@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -86,126 +87,165 @@ class SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Form(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            key: formKey,
-            child: FixSizedBox(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.only(top: 40, bottom: 50),
-                child: Column(
-                  children: [
-                    Stack(
+    return WillPopScope(
+      onWillPop: () async => true,
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Form(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              key: formKey,
+              child: FixSizedBox(
+                maxWidth: kIsWeb ? 500 : context.width(),
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: kIsWeb ? 16 : 0),
+                  decoration: kIsWeb
+                      ? BoxDecoration(
+                          color: context.cardColor,
+                          borderRadius: BorderRadius.circular(defaultRadius),
+                          boxShadow: [
+                            BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 8.0, spreadRadius: 3.0),
+                          ],
+                        )
+                      : null,
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.only(top: 16,bottom: 24),
+                    child: Column(
                       children: [
-                        commonCachedNetworkImage(appStore.isDarkMode ? loginBGImage1 : loginBGImage, height: 250, width: context.width(), fit: BoxFit.cover),
-                        commonCachedNetworkImage(appStore.isDarkMode ? loginImage : loginImage1, height: 150, width: context.width(), fit: BoxFit.contain),
-                      ],
-                    ),
-                    16.height,
-                    Text(language!.loginToYourAccount, style: boldTextStyle()),
-                    16.height,
-                    Column(
-                      children: [
+                        Stack(
+                          children: [
+                            commonCachedNetworkImage(appStore.isDarkMode ? loginBGImage1 : loginBGImage, height: 250, width: context.width(), fit: BoxFit.cover),
+                            commonCachedNetworkImage(appStore.isDarkMode ? loginImage : loginImage1, height: 150, width: context.width(), fit: BoxFit.contain),
+                          ],
+                        ),
+                        16.height,
+                        Text(language!.loginToYourAccount, style: boldTextStyle()),
+                        16.height,
                         Column(
                           children: [
-                            AppTextField(
-                              controller: emailController,
-                              focus: emailFocus,
-                              nextFocus: passwordFocus,
-                              textFieldType: TextFieldType.EMAIL,
-                              textInputAction: TextInputAction.next,
-                              errorThisFieldRequired: language!.thisFieldIsRequired,
-                              decoration: inputDecorationRecipe(labelTextName: language!.email),
-                            ),
+                            Column(
+                              children: [
+                                AppTextField(
+                                  controller: emailController,
+                                  focus: emailFocus,
+                                  nextFocus: passwordFocus,
+                                  textFieldType: TextFieldType.EMAIL,
+                                  textInputAction: TextInputAction.next,
+                                  errorThisFieldRequired: language!.thisFieldIsRequired,
+                                  decoration: inputDecorationRecipe(labelTextName: language!.email),
+                                ),
+                                16.height,
+                                AppTextField(
+                                  controller: passController,
+                                  focus: passwordFocus,
+                                  textFieldType: TextFieldType.PASSWORD,
+                                  errorMinimumPasswordLength: language!.passwordLengthShouldBeMoreThan,
+                                  textInputAction: TextInputAction.done,
+                                  errorThisFieldRequired: language!.thisFieldIsRequired,
+                                  decoration: inputDecorationRecipe(labelTextName: language!.password),
+                                  onFieldSubmitted: (val) {
+                                    hideKeyboard(context);
+                                    signIn();
+                                  },
+                                ),
+                              ],
+                            ).paddingSymmetric(horizontal: 16),
                             16.height,
-                            AppTextField(
-                              controller: passController,
-                              focus: passwordFocus,
-                              textFieldType: TextFieldType.PASSWORD,
-                              errorMinimumPasswordLength: language!.passwordLengthShouldBeMoreThan,
-                              textInputAction: TextInputAction.done,
-                              errorThisFieldRequired: language!.thisFieldIsRequired,
-                              decoration: inputDecorationRecipe(labelTextName: language!.password),
-                              onFieldSubmitted: (val) {
-                                hideKeyboard(context);
+                            CheckboxListTile(
+                              value: mIsDemoUser,
+                              onChanged: (v) {
+                                mIsDemoUser = !mIsDemoUser;
+                                setState(() {});
+
+                                toggleDemoUser();
+                              },
+                              title: Text(language!.loginWithAdminDemo, style: secondaryTextStyle()),
+                            ),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: TextButton(
+                                child: Text('Forgot Password?', style: boldTextStyle(color: primaryColor)),
+                                onPressed: () async {
+                                  if (kIsWeb) {
+                                    await showDialog(
+                                      context: context,
+                                      builder: (_) {
+                                        return AlertDialog(
+                                          title: Row(
+                                            children: [
+                                              Text(
+                                                language!.forgotPassword,
+                                                style: boldTextStyle(size: 18),
+                                              ).expand(),
+                                              IconButton(onPressed: () => finish(context), icon: Icon(Icons.close), color: context.iconColor)
+                                            ],
+                                          ),
+                                          content: SizedBox(
+                                            width: context.width() * 0.3,
+                                            child: ForgotPasswordScreen(),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  } else {
+                                    ForgotPasswordScreen().launch(context);
+                                  }
+                                },
+                              ),
+                            ).paddingOnly(right: 16, bottom: 16),
+                            AppButton(
+                              shapeBorder: RoundedRectangleBorder(borderRadius: radius(10)),
+                              color: primaryColor,
+                              width: context.width(),
+                              onTap: () {
                                 signIn();
                               },
+                              text: language!.signIn,
+                              textStyle: boldTextStyle(color: white),
+                            ).paddingSymmetric(horizontal: 16),
+                            16.height,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(language!.alreadyHaveAnAccount, style: secondaryTextStyle()),
+                                4.width,
+                                TextButton(
+                                  onPressed: () {
+                                    SignUpScreen().launch(context);
+                                  },
+                                  child: Text(language!.signUp, style: boldTextStyle(color: context.primaryColor)),
+                                )
+                              ],
                             ),
-                          ],
-                        ).paddingSymmetric(horizontal: 16),
-                        16.height,
-                        CheckboxListTile(
-                          value: mIsDemoUser,
-                          onChanged: (v) {
-                            mIsDemoUser = !mIsDemoUser;
-                            setState(() {});
+                            if (isMobile) Text(language!.orLoginWithGoogle, style: secondaryTextStyle()).center(),
+                            8.height,
+                            if (isMobile)
+                              AppButton(
+                                elevation: 3,
+                                onTap: () async {
+                                  appStore.setLoading(true);
 
-                            toggleDemoUser();
-                          },
-                          title: Text(language!.loginWithAdminDemo, style: secondaryTextStyle()),
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            child: Text('Forgot Password?', style: boldTextStyle(color: primaryColor)),
-                            onPressed: () {
-                              ForgotPasswordScreen().launch(context);
-                            },
-                          ),
-                        ).paddingOnly(right: 16),
-                        AppButton(
-                          shapeBorder: RoundedRectangleBorder(borderRadius: radius(10)),
-                          color: primaryColor,
-                          width: context.width(),
-                          onTap: () {
-                            signIn();
-                          },
-                          text: language!.signIn,
-                          textStyle: boldTextStyle(color: white),
-                        ).paddingSymmetric(horizontal: 16),
-                        16.height,
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(language!.alreadyHaveAnAccount, style: secondaryTextStyle()),
-                            4.width,
-                            TextButton(
-                              onPressed: () {
-                                SignUpScreen().launch(context);
-                              },
-                              child: Text(language!.signUp, style: boldTextStyle(color: context.primaryColor)),
-                            )
+                                  await signInWithGoogle().then((value) {
+                                    DashboardScreen().launch(context, isNewTask: true);
+                                    appStore.setLoading(false);
+                                  }).catchError((e) {
+                                    appStore.setLoading(false);
+                                    toast(e.toString());
+                                  });
+                                },
+                                child: GoogleLogoWidget(),
+                              ),
                           ],
                         ),
-                        Text(language!.orLoginWithGoogle, style: secondaryTextStyle()).center(),
-                        8.height,
-                        if (isMobile)
-                          AppButton(
-                            elevation: 0.5,
-                            onTap: () async {
-                              appStore.setLoading(true);
-
-                              await signInWithGoogle().then((value) {
-                                DashboardScreen().launch(context, isNewTask: true);
-                                appStore.setLoading(false);
-                              }).catchError((e) {
-                                appStore.setLoading(false);
-                                toast(e.toString());
-                              });
-                            },
-                            child: GoogleLogoWidget(),
-                          ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ).center(),
-          ),
-          Observer(builder: (_) => Loader().visible(appStore.isLoader)),
-        ],
+              ).center(),
+            ),
+            Observer(builder: (_) => Loader().visible(appStore.isLoader)),
+          ],
+        ),
       ),
     );
   }

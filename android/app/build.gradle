@@ -30,8 +30,8 @@ android {
         applicationId "com.iqonic.ricetta"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 4
-        versionName "3.5.0"
+        versionCode 5
+        versionName "3.6.0"
         multiDexEnabled true
     }
 

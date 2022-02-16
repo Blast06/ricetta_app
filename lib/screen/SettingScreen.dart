@@ -51,22 +51,24 @@ class SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget(
-        language!.setting,
-        backWidget: CloseButton(color: context.iconColor),
-        actions: [
-          SnapHelperWidget<PackageInfo?>(
-            future: PackageInfo.fromPlatform(),
-            onSuccess: (data) {
-              if (data != null) {
-                return Text('v ${data.version.toString()}', style: boldTextStyle()).paddingRight(16).center();
-              } else {
-                return SizedBox();
-              }
-            },
-          ),
-        ],
-      ),
+      appBar: kIsWeb
+          ? null
+          : appBarWidget(
+              language!.setting,
+              backWidget: CloseButton(color: context.iconColor),
+              actions: [
+                SnapHelperWidget<PackageInfo?>(
+                  future: PackageInfo.fromPlatform(),
+                  onSuccess: (data) {
+                    if (data != null) {
+                      return Text('v ${data.version.toString()}', style: boldTextStyle()).paddingRight(16).center();
+                    } else {
+                      return SizedBox();
+                    }
+                  },
+                ),
+              ],
+            ),
       body: Stack(
         alignment: Alignment.bottomCenter,
         children: [

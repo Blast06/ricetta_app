@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,14 +12,14 @@ class AppTheme {
   static final ThemeData lightTheme = ThemeData(
     primarySwatch: createMaterialColor(primaryColor),
     primaryColor: primaryColor,
-    scaffoldBackgroundColor: scaffoldLightColor,
+    scaffoldBackgroundColor: Colors.white,
     accentColor: primaryColor,
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: Colors.white,
       selectedItemColor: primaryColor,
       unselectedItemColor: black,
     ),
-    fontFamily: GoogleFonts.rajdhani().fontFamily,
+    fontFamily: kIsWeb ? GoogleFonts.merriweather().fontFamily : GoogleFonts.rajdhani().fontFamily,
     iconTheme: IconThemeData(color: black),
     dialogBackgroundColor: Colors.white,
     unselectedWidgetColor: Colors.black,
@@ -38,6 +39,11 @@ class AppTheme {
     bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.white),
     colorScheme: ColorScheme.light(
       primary: primaryColor,
+    ),
+    dividerTheme: DividerThemeData(color: Colors.grey.shade500, thickness: 0.1),
+    scrollbarTheme: ScrollbarThemeData(
+      thumbColor: MaterialStateProperty.all(primaryColor),
+      isAlwaysShown: true,
     ),
   ).copyWith(
     pageTransitionsTheme: PageTransitionsTheme(
@@ -59,7 +65,7 @@ class AppTheme {
       unselectedItemColor: white,
       selectedItemColor: primaryColor,
     ),
-    fontFamily: GoogleFonts.rajdhani().fontFamily,
+    fontFamily: kIsWeb ? GoogleFonts.merriweather().fontFamily : GoogleFonts.rajdhani().fontFamily,
     iconTheme: IconThemeData(color: Colors.white),
     dialogBackgroundColor: scaffoldSecondaryDark,
     unselectedWidgetColor: Colors.white60,
@@ -79,6 +85,11 @@ class AppTheme {
     bottomSheetTheme: BottomSheetThemeData(backgroundColor: appButtonColorDark),
     colorScheme: ColorScheme.dark(
       primary: primaryColor,
+    ),
+    dividerTheme: DividerThemeData(color: Colors.grey.shade500, thickness: 0.1),
+    scrollbarTheme: ScrollbarThemeData(
+      thumbColor: MaterialStateProperty.all(primaryColor),
+      isAlwaysShown: true,
     ),
   ).copyWith(
     pageTransitionsTheme: PageTransitionsTheme(

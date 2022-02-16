@@ -40,6 +40,7 @@ class AdminSettingScreenState extends State<AdminSettingScreen> {
   void setState(fn) {
     if (mounted) super.setState(fn);
   }
+
   @override
   void dispose() {
     myBanner!.dispose();
@@ -49,7 +50,7 @@ class AdminSettingScreenState extends State<AdminSettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget(language!.adminSetting, elevation: 0),
+      appBar: kIsWeb ? null : appBarWidget(language!.adminSetting, elevation: 0),
       body: Stack(
         children: [
           Responsive(

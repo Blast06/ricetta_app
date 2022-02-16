@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -84,61 +85,97 @@ class AdminSliderScreenState extends State<AdminSliderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget(
-        language!.slider,
-        elevation: 0,
-        titleTextStyle: boldTextStyle(),
-        actions: [
-          IconButton(
-            onPressed: () async {
-              await AdminAddSliderScreen().launch(context, pageRouteAnimation: PageRouteAnimation.Slide);
-              init();
-            },
-            icon: Icon(Icons.add, size: 20, color: context.iconColor),
-          )
-        ],
-      ),
+      appBar: kIsWeb
+          ? null
+          : appBarWidget(
+              language!.slider,
+              elevation: 0,
+              titleTextStyle: boldTextStyle(),
+              actions: [
+                IconButton(
+                  onPressed: () async {
+                    await AdminAddSliderScreen().launch(context, pageRouteAnimation: PageRouteAnimation.Slide);
+                    init();
+                  },
+                  icon: Icon(Icons.add, size: 20, color: context.iconColor),
+                )
+              ],
+            ),
       body: Stack(
         children: [
           SingleChildScrollView(
             padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
             child: FixSizedBox(
+              maxWidth: kIsWeb ? null : context.width(),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: sliderData.map((e) {
-                  return Stack(
-                    alignment: Alignment.bottomCenter,
-                    children: [
-                      commonCachedNetworkImage(
-                        e.slider_image.validate(),
-                        width: context.width(),
-                        fit: BoxFit.cover,
-                        height: context.height() * 0.25,
-                      ).cornerRadiusWithClipRRect(10).paddingOnly(top: 8, bottom: 8).onTap(() async {
-                        await AdminAddSliderScreen(data: e).launch(context, pageRouteAnimation: PageRouteAnimation.Slide);
-                        init();
-                      }),
-                      e.title != null
-                          ? Container(
-                              width: context.width(),
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), gradient: gradientDecoration()),
-                              padding: EdgeInsets.all(8),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: BackdropFilter(
-                                  filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
-                                  child: Container(
-                                    padding: EdgeInsets.all(8),
-                                    decoration: glassBoxDecoration(),
-                                    child: Text(e.title.validate(), style: boldTextStyle()),
+                children: [
+                  if (kIsWeb) ...[
+                    Row(
+                      children: [
+                        Text(language!.addSlider, style: boldTextStyle(size: 24)).expand(),
+                        IconButton(
+                          onPressed: () async {
+                            await showDialog(
+                              context: context,
+                              builder: (_) {
+                                return AdminAddSliderScreen();
+                              },
+                            );
+                            init();
+                          },
+                          icon: Icon(Icons.add, size: 20, color: context.iconColor),
+                        )
+                      ],
+                    ),
+                    Divider(),
+                  ],
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: sliderData.map((e) {
+                      return Stack(
+                        alignment: Alignment.bottomCenter,
+                        children: [
+                          commonCachedNetworkImage(
+                            e.slider_image.validate(),
+                            width: context.width(),
+                            fit: BoxFit.cover,
+                            height: context.height() * 0.25,
+                          ).cornerRadiusWithClipRRect(10).paddingOnly(top: 8, bottom: 8).onTap(() async {
+                            if (kIsWeb) {
+                              await showDialog(
+                                context: context,
+                                builder: (_) {
+                                  return AdminAddSliderScreen(data: e);
+                                },
+                              );
+                            } else {
+                              await AdminAddSliderScreen(data: e).launch(context, pageRouteAnimation: PageRouteAnimation.Slide);
+                            }
+                            init();
+                          }),
+                          e.title != null
+                              ? Container(
+                                  width: context.width(),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), gradient: gradientDecoration()),
+                                  padding: EdgeInsets.all(8),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: BackdropFilter(
+                                      filter: ImageFilter.blur(sigmaX: 8.0, sigmaY: 8.0),
+                                      child: Container(
+                                        padding: EdgeInsets.all(8),
+                                        decoration: glassBoxDecoration(),
+                                        child: Text(e.title.validate(), style: boldTextStyle()),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            )
-                          : SizedBox()
-                    ],
-                  );
-                }).toList(),
+                                )
+                              : SizedBox()
+                        ],
+                      );
+                    }).toList(),
+                  ),
+                ],
               ),
             ),
           ),

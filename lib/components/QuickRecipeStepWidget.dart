@@ -153,6 +153,13 @@ class QuickRecipeStepWidgetState extends State<QuickRecipeStepWidget> {
           PageView.builder(
             controller: controller,
             itemCount: widget.recipeStepData!.length,
+            onPageChanged: (index) {
+              if (mIsSpeaking) {
+                mIsSpeaking = false;
+                flutterTts.stop();
+                setState(() {});
+              }
+            },
             itemBuilder: (BuildContext context, int itemIndex) {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),

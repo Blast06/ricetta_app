@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:recipe_app/components/FixSizedBox.dart';
@@ -186,6 +187,7 @@ class NewRecipeScreenState extends State<NewRecipeScreen> {
         ),
         resizeToAvoidBottomInset: false,
         body: FixSizedBox(
+          maxWidth: kIsWeb ? null : context.width(),
           child: PageView.builder(
             physics: NeverScrollableScrollPhysics(),
             controller: pageController,

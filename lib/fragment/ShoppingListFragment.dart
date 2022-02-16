@@ -86,7 +86,7 @@ class ShoppingListFragmentState extends State<ShoppingListFragment> {
                       )
                     : SizedBox();
               },
-              separatorBuilder: (_, index) => Divider(height: 0),
+              separatorBuilder: (_, index) => Divider(),
             );
           }
           return snapWidgetHelper(snapshot);

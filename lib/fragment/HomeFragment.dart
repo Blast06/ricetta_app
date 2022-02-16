@@ -8,7 +8,6 @@ import 'package:recipe_app/components/SliderWidget.dart';
 import 'package:recipe_app/components/TitleWidget.dart';
 import 'package:recipe_app/main.dart';
 import 'package:recipe_app/models/RecipeDashboardModel.dart';
-import 'package:recipe_app/network/NetworkUtils.dart';
 import 'package:recipe_app/network/RestApis.dart';
 import 'package:recipe_app/screen/SettingScreen.dart';
 import 'package:recipe_app/screen/recipe/RecipeSeeAllScreen.dart';
@@ -21,8 +20,7 @@ class HomeFragment extends StatefulWidget {
   HomeFragmentState createState() => HomeFragmentState();
 }
 
-class HomeFragmentState extends State<HomeFragment>
-    with AutomaticKeepAliveClientMixin {
+class HomeFragmentState extends State<HomeFragment> with AutomaticKeepAliveClientMixin {
   PageController pageController = PageController();
 
   int currentPage = 0;
@@ -80,25 +78,19 @@ class HomeFragmentState extends State<HomeFragment>
                   mAppName,
                   titleWidget: Row(
                     children: [
-                      Image.asset(appLogo,
-                          height: 40, width: 40, fit: BoxFit.cover),
+                      Image.asset(appLogo, height: 40, width: 40, fit: BoxFit.cover),
                       8.width,
-                      Text(mAppName,
-                          style: boldTextStyle(
-                              fontFamily: fontFamilyGloria, size: 20)),
+                      Text(mAppName, style: boldTextStyle(fontFamily: fontFamilyGloria, size: 20)),
                     ],
                   ),
-                  titleTextStyle:
-                      boldTextStyle(fontFamily: fontFamilyGloria, size: 20),
+                  titleTextStyle: boldTextStyle(fontFamily: fontFamilyGloria, size: 20),
                   showBack: false,
                   color: appStore.isDarkMode ? scaffoldSecondaryDark : white,
                   elevation: 0,
                   actions: [
                     IconButton(
                       onPressed: () {
-                        SettingScreen().launch(context,
-                            pageRouteAnimation:
-                                PageRouteAnimation.SlideBottomTop);
+                        SettingScreen().launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
                       },
                       icon: Icon(Icons.settings, color: context.iconColor),
                     ).paddingOnly(right: 8)
@@ -117,36 +109,28 @@ class HomeFragmentState extends State<HomeFragment>
             child: FutureBuilder<RecipeDashboardModel>(
               future: getRecipeData(),
               builder: (context, snap) {
-                logger.v("snap DATA ==> ${snap.data}");
                 if (snap.hasData) {
                   if (snap.data!.latestRecipe!.isEmpty) {
                     return EmptyWidget(title: language!.noDataFound);
                   }
                   return SingleChildScrollView(
-                    padding: isWeb ? EdgeInsets.only(top: 16) : null,
+                    padding: isWeb? EdgeInsets.only(top: 16): null,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         snap.data!.slider!.isNotEmpty
                             ? Responsive(
-                                mobile: SliderWidget(snap.data!.slider!,
-                                    spanCount: context.width()),
-                                web: SliderWidget(snap.data!.slider!,
-                                    spanCount: context.width() * 0.77),
+                                mobile: SliderWidget(snap.data!.slider!, spanCount: context.width()),
+                                web: SliderWidget(snap.data!.slider!, spanCount: context.width() * 0.77),
                               )
-                            : Image.asset(EmptySlider,
-                                height: context.height() * 0.25,
-                                fit: BoxFit.cover),
+                            : Image.asset(EmptySlider, height: context.height() * 0.25, fit: BoxFit.cover),
                         16.height,
                         TitleWidget(language!.latestRecipes),
                         16.height,
                         Responsive(
-                          web: LatestRecipeWidget(snap.data!.latestRecipe!,
-                              spanCount: 5),
-                          tablet: LatestRecipeWidget(snap.data!.latestRecipe!,
-                              spanCount: 3),
-                          mobile: LatestRecipeWidget(snap.data!.latestRecipe!,
-                              spanCount: 2),
+                          web: LatestRecipeWidget(snap.data!.latestRecipe!, spanCount: 5),
+                          tablet: LatestRecipeWidget(snap.data!.latestRecipe!, spanCount: 3),
+                          mobile: LatestRecipeWidget(snap.data!.latestRecipe!, spanCount: 2),
                           useFullWidth: false,
                         ),
                         8.height,

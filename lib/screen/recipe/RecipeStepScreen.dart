@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
@@ -249,6 +250,7 @@ class RecipeStepScreenState extends State<RecipeStepScreen> {
           SingleChildScrollView(
             padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
             child: FixSizedBox(
+              maxWidth: kIsWeb ? null : context.width(),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

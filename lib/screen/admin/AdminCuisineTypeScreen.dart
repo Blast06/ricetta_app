@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:recipe_app/components/EmptyWidget.dart';
@@ -86,105 +87,176 @@ class AdminCuisineTypeScreenState extends State<AdminCuisineTypeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget(
-        language!.addCuisine,
-        elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (_) {
-                  return AlertDialog(
-                    title: Text(language!.addCuisine, style: primaryTextStyle()),
-                    content: AppTextField(
-                      autoFocus: true,
-                      controller: cuisineController,
-                      textFieldType: TextFieldType.ADDRESS,
-                      decoration: inputDecorationRecipe(labelTextName: language!.egChinese),
-                    ),
-                    actions: <Widget>[
-                      TextButton(
-                        child: Text(language!.cancel),
-                        onPressed: () {
-                          finish(context);
-                        },
-                      ),
-                      TextButton(
-                        child: Text(language!.ok),
-                        onPressed: () async {
-                          if (appStore.isDemoAdmin) {
-                            snackBar(context, title: language!.demoUserMsg);
-                          } else {
-                            if (cuisineController.text.isNotEmpty) {
-                              Map req = {
-                                'type': RecipeTypeCuisineData,
-                                'value': toSlug(cuisineController.text.trim()),
-                                'label': cuisineController.text.trim(),
-                              };
-                              await addCuisine(req).then((value) {
-                                snackBar(context, title: language!.categorySuccessfully);
+      appBar: kIsWeb
+          ? null
+          : appBarWidget(
+              language!.addCuisine,
+              elevation: 0,
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (_) {
+                        return AlertDialog(
+                          title: Text(language!.addCuisine, style: primaryTextStyle()),
+                          content: AppTextField(
+                            autoFocus: true,
+                            controller: cuisineController,
+                            textFieldType: TextFieldType.ADDRESS,
+                            decoration: inputDecorationRecipe(labelTextName: language!.egChinese),
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text(language!.cancel),
+                              onPressed: () {
                                 finish(context);
-                                init();
-                              }).catchError((e) {
-                                log(e);
-                              });
-                            } else {
-                              snackBar(context, title: language!.pleaseEnterCuisine);
-                            }
-                          }
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-            icon: Icon(Icons.add, color: context.iconColor),
-          )
-        ],
-      ),
+                              },
+                            ),
+                            TextButton(
+                              child: Text(language!.ok),
+                              onPressed: () async {
+                                if (appStore.isDemoAdmin) {
+                                  snackBar(context, title: language!.demoUserMsg);
+                                } else {
+                                  if (cuisineController.text.isNotEmpty) {
+                                    Map req = {
+                                      'type': RecipeTypeCuisineData,
+                                      'value': toSlug(cuisineController.text.trim()),
+                                      'label': cuisineController.text.trim(),
+                                    };
+                                    await addCuisine(req).then((value) {
+                                      snackBar(context, title: language!.categorySuccessfully);
+                                      finish(context);
+                                      init();
+                                    }).catchError((e) {
+                                      log(e);
+                                    });
+                                  } else {
+                                    snackBar(context, title: language!.pleaseEnterCuisine);
+                                  }
+                                }
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  icon: Icon(Icons.add, color: context.iconColor),
+                )
+              ],
+            ),
       body: Stack(
         children: [
           SingleChildScrollView(
             padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
             controller: scrollController,
             child: FixSizedBox(
+              maxWidth: kIsWeb ? null : context.width(),
               child: Column(
-                children: cuisineData.map((e) {
-                  return Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (kIsWeb)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(e.label.validate(), style: primaryTextStyle()),
-                        IconButton(
-                          onPressed: () {
-                            showConfirmDialogCustom(
-                              context,
-                              primaryColor: primaryColor,
-                              title: language!.sureYouWantCuisine,
-                              onAccept: (c) {
-                                if (appStore.isDemoAdmin) {
-                                  snackBar(context, title: language!.demoUserMsg);
-                                } else {
-                                  Map req = {'id': e.id};
-                                  deleteCuisine(req).then((value) {
-                                    snackBar(context, title: language!.cuisineHasBeenDeletedSuccessfully);
-                                    init();
-                                  }).catchError((e) {
-                                    log(e);
-                                  });
-                                }
+                        Row(
+                          children: [
+                            Text(language!.addCuisine, style: boldTextStyle(size: 24)).expand(),
+                            IconButton(
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (_) {
+                                    return AlertDialog(
+                                      title: Text(language!.addCuisine, style: primaryTextStyle()),
+                                      content: AppTextField(
+                                        autoFocus: true,
+                                        controller: cuisineController,
+                                        textFieldType: TextFieldType.ADDRESS,
+                                        decoration: inputDecorationRecipe(labelTextName: language!.egChinese),
+                                      ),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          child: Text(language!.cancel),
+                                          onPressed: () {
+                                            finish(context);
+                                          },
+                                        ),
+                                        TextButton(
+                                          child: Text(language!.ok),
+                                          onPressed: () async {
+                                            if (appStore.isDemoAdmin) {
+                                              snackBar(context, title: language!.demoUserMsg);
+                                            } else {
+                                              if (cuisineController.text.isNotEmpty) {
+                                                Map req = {
+                                                  'type': RecipeTypeCuisineData,
+                                                  'value': toSlug(cuisineController.text.trim()),
+                                                  'label': cuisineController.text.trim(),
+                                                };
+                                                await addCuisine(req).then((value) {
+                                                  snackBar(context, title: language!.categorySuccessfully);
+                                                  finish(context);
+                                                  init();
+                                                }).catchError((e) {
+                                                  log(e);
+                                                });
+                                              } else {
+                                                snackBar(context, title: language!.pleaseEnterCuisine);
+                                              }
+                                            }
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
                               },
-                              dialogType: DialogType.DELETE,
-                            );
-                          },
-                          icon: Icon(Icons.delete, color: primaryColor),
-                        )
+                              icon: Icon(Icons.add, color: context.iconColor),
+                            ),
+                          ],
+                        ),
+                        Divider(),
                       ],
                     ),
-                  );
-                }).toList(),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: cuisineData.map((e) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(e.label.validate(), style: primaryTextStyle()),
+                          IconButton(
+                            onPressed: () {
+                              showConfirmDialogCustom(
+                                context,
+                                primaryColor: primaryColor,
+                                title: language!.sureYouWantCuisine,
+                                onAccept: (c) {
+                                  if (appStore.isDemoAdmin) {
+                                    snackBar(context, title: language!.demoUserMsg);
+                                  } else {
+                                    Map req = {'id': e.id};
+                                    deleteCuisine(req).then((value) {
+                                      snackBar(context, title: language!.cuisineHasBeenDeletedSuccessfully);
+                                      init();
+                                    }).catchError((e) {
+                                      log(e);
+                                    });
+                                  }
+                                },
+                                dialogType: DialogType.DELETE,
+                              );
+                            },
+                            icon: Icon(Icons.delete, color: primaryColor),
+                          )
+                        ],
+                      );
+                    }).toList(),
+                  ),
+                ],
               ),
             ),
           ),

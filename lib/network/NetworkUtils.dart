@@ -3,14 +3,12 @@ import 'dart:io';
 
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
-import 'package:logger/logger.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:recipe_app/main.dart';
 import 'package:recipe_app/network/RestApis.dart';
 import 'package:recipe_app/utils/Constants.dart';
 import 'package:recipe_app/utils/Widgets.dart';
 
-Logger logger = Logger();
 Map<String, String> buildHeaderTokens() {
   Map<String, String> header = {
     HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8',
@@ -21,8 +19,7 @@ Map<String, String> buildHeaderTokens() {
   };
 
   if (appStore.isLoggedIn) {
-    header.putIfAbsent(HttpHeaders.authorizationHeader,
-        () => 'Bearer ${getStringAsync(API_TOKEN)}');
+    header.putIfAbsent(HttpHeaders.authorizationHeader, () => 'Bearer ${getStringAsync(API_TOKEN)}');
   }
   log(jsonEncode(header));
   return header;
@@ -32,13 +29,12 @@ Uri buildBaseUrl(String endPoint) {
   Uri url = Uri.parse(endPoint);
   if (!endPoint.startsWith('http')) url = Uri.parse('$mBaseUrl$endPoint');
 
-  logger.v('URL: ${url.toString()}');
+  log('URL: ${url.toString()}');
 
   return url;
 }
 
-Future<Response> buildHttpResponse(String endPoint,
-    {HttpMethod method = HttpMethod.GET, Map? request}) async {
+Future<Response> buildHttpResponse(String endPoint, {HttpMethod method = HttpMethod.GET, Map? request}) async {
   if (await isNetworkAvailable()) {
     var headers = buildHeaderTokens();
     Uri url = buildBaseUrl(endPoint);
@@ -49,24 +45,16 @@ Future<Response> buildHttpResponse(String endPoint,
       if (method == HttpMethod.POST) {
         log('Request: $request');
 
-        response = await http
-            .post(url, body: jsonEncode(request), headers: headers)
-            .timeout(20.seconds, onTimeout: () => throw 'Timeout');
+        response = await http.post(url, body: jsonEncode(request), headers: headers).timeout(20.seconds, onTimeout: () => throw 'Timeout');
       } else if (method == HttpMethod.DELETE) {
-        response = await delete(url, headers: headers)
-            .timeout(20.seconds, onTimeout: () => throw 'Timeout');
+        response = await delete(url, headers: headers).timeout(20.seconds, onTimeout: () => throw 'Timeout');
       } else if (method == HttpMethod.PUT) {
-        response = await put(url, body: jsonEncode(request), headers: headers)
-            .timeout(20.seconds, onTimeout: () => throw 'Timeout');
+        response = await put(url, body: jsonEncode(request), headers: headers).timeout(20.seconds, onTimeout: () => throw 'Timeout');
       } else {
-        response = await get(url, headers: headers)
-            .timeout(20.seconds, onTimeout: () => throw 'Timeout');
+        response = await get(url, headers: headers).timeout(20.seconds, onTimeout: () => throw 'Timeout');
       }
 
-      // log('Response ($method): ${url.toString()} ${response.statusCode} ${response.body}');
-
-      logger.v(
-          'Response ($method): ${url.toString()} ${response.statusCode} ${response.body}');
+      log('Response ($method): ${url.toString()} ${response.statusCode} ${response.body}');
 
       return response;
     } catch (e) {
@@ -95,7 +83,7 @@ Future handleResponse(Response response, [bool? avoidTokenError]) async {
       }).catchError((e) {
         throw TokenException(e);
       });
-    } else {
+    }else{
       throw '';
     }
   }
@@ -112,7 +100,6 @@ Future handleResponse(Response response, [bool? avoidTokenError]) async {
     }
   }
 }
-
 enum HttpMethod { GET, POST, DELETE, PUT }
 
 class TokenException implements Exception {

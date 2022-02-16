@@ -15,7 +15,6 @@ class AboutAppScreen extends StatefulWidget {
 }
 
 class AboutAppScreenState extends State<AboutAppScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -25,7 +24,6 @@ class AboutAppScreenState extends State<AboutAppScreen> {
   void init() async {
     //
   }
-
 
   @override
   void setState(fn) {
@@ -40,9 +38,11 @@ class AboutAppScreenState extends State<AboutAppScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget(language!.about, elevation: 0),
+      appBar: kIsWeb ? null : appBarWidget(language!.about, elevation: 0),
       body: SingleChildScrollView(
+        padding: EdgeInsets.only(top: 16, bottom: 16),
         child: FixSizedBox(
+          maxWidth: kIsWeb ? null : context.width(),
           child: Container(
             padding: EdgeInsets.all(16),
             child: Column(
