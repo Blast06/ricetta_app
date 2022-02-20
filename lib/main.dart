@@ -39,11 +39,12 @@ void main() async {
 
   await initialize(aLocaleLanguageList: languageList());
 
-  await appStore.setLanguage(getStringAsync(SELECTED_LANGUAGE_CODE, defaultValue: defaultLanguage));
+  await appStore.setLanguage(
+      getStringAsync(SELECTED_LANGUAGE_CODE, defaultValue: defaultLanguage));
 
   if (isMobile) {
     await Firebase.initializeApp();
-   await MobileAds.instance.initialize();
+    await MobileAds.instance.initialize();
   }
 
   defaultRadius = 16.0;
@@ -104,10 +105,19 @@ class _MyAppState extends State<MyApp> {
         home: SplashScreen(),
         builder: scrollBehaviour(),
         supportedLocales: LanguageDataModel.languageLocales(),
-        localizationsDelegates: [AppLocalizations(), GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate],
+        localizationsDelegates: [
+          AppLocalizations(),
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate
+        ],
         localeResolutionCallback: (locale, supportedLocales) => locale,
         locale: Locale(appStore.selectedLanguageCode),
       ),
     );
   }
 }
+// TODO: 1. SET UP ADS
+//TODO:  2. DELETE ALL THE ANNOYING ADS
+//TODO:  3. ADD SPLASH SCREEN + AD
+//TODO:  4. DELETE CART FROM TABS(HIDE)
+//TODO:  5. DELETE CART FROM TABS(HIDE)

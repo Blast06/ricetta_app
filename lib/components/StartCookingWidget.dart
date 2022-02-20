@@ -16,7 +16,8 @@ class StartCookingWidget extends StatefulWidget {
   StartCookingWidgetState createState() => StartCookingWidgetState();
 }
 
-class StartCookingWidgetState extends State<StartCookingWidget> with TickerProviderStateMixin {
+class StartCookingWidgetState extends State<StartCookingWidget>
+    with TickerProviderStateMixin {
   RewardedAd? _rewardedAd;
   late AnimationController controller;
   late final Animation<double> _animation = CurvedAnimation(
@@ -31,7 +32,9 @@ class StartCookingWidgetState extends State<StartCookingWidget> with TickerProvi
   }
 
   void init() async {
-    controller = AnimationController(vsync: this, duration: Duration(seconds: 2))..repeat(reverse: true);
+    controller =
+        AnimationController(vsync: this, duration: Duration(seconds: 2))
+          ..repeat(reverse: true);
     _createRewardedAd();
   }
 
@@ -58,7 +61,8 @@ class StartCookingWidgetState extends State<StartCookingWidget> with TickerProvi
       return;
     }
     _rewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
-      onAdShowedFullScreenContent: (RewardedAd ad) => print('ad onAdShowedFullScreenContent.'),
+      onAdShowedFullScreenContent: (RewardedAd ad) =>
+          print('ad onAdShowedFullScreenContent.'),
       onAdDismissedFullScreenContent: (RewardedAd ad) {
         print('$ad onAdDismissedFullScreenContent.');
         ad.dispose();
@@ -72,9 +76,12 @@ class StartCookingWidgetState extends State<StartCookingWidget> with TickerProvi
     );
 
     _rewardedAd!.setImmersiveMode(true);
-    _rewardedAd!.show(onUserEarnedReward: (RewardedAd ad, RewardItem reward) {
-      print('$ad with reward $RewardItem(${reward.amount}, ${reward.type}');
-    });
+    // _rewardedAd!.show(onUserEarnedReward: (RewardedAd ad, RewardItem reward) {
+    //   print('$ad with reward $RewardItem(${reward.amount}, ${reward.type}');
+    // });
+
+    _rewardedAd!
+        .show(onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {});
     _rewardedAd = null;
   }
 
@@ -110,14 +117,16 @@ class StartCookingWidgetState extends State<StartCookingWidget> with TickerProvi
         children: [
           ScaleTransition(
             scale: _animation,
-            child: commonCachedNetworkImage(ChefImage, height: 60, width: 60, fit: BoxFit.cover),
+            child: commonCachedNetworkImage(ChefImage,
+                height: 60, width: 60, fit: BoxFit.cover),
           ),
           20.width,
           Text(language!.startCooking, style: boldTextStyle(size: 20)),
         ],
       ),
     ).onTap(() {
-      QuickRecipeStepWidget(recipeStepData: widget.recipeStepData).launch(context, pageRouteAnimation: PageRouteAnimation.Slide);
+      QuickRecipeStepWidget(recipeStepData: widget.recipeStepData)
+          .launch(context, pageRouteAnimation: PageRouteAnimation.Slide);
     }, highlightColor: context.cardColor).paddingOnly(left: 16, right: 16);
   }
 }

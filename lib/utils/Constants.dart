@@ -1,10 +1,11 @@
 const mAppName = 'Ricetta';
 
-const mBaseUrl = 'https://wordpress.iqonic.design/product/mobile/ricetta/api/';
+const mBaseUrl = 'http://45.77.195.98/api/';
 //const mBaseUrl = 'http://192.168.1.230/wp_plugin/recipe-app/api/';
 
 const PostsPerPage = 10;
-const mAppInfo = '$mAppName Introducing the latest, cooking recipe app for cooking enthusiasts and Youtube chefs. '
+const mAppInfo =
+    '$mAppName Introducing the latest, cooking recipe app for cooking enthusiasts and Youtube chefs. '
     'The design consistency and vivid use of UI elements makes this amazing recipe app the starting point of launching a classic food recipe mobile application. '
     'Sift through a numbers of recipes, save the favorites, and browse from the mobile-friendly user interface using this Recipe mobile app. '
     'Ideally created for food fanatics and at-home cooking chefs to share their mouth-watering food recipes, admin of this app is allowed to create and manage recipes efficiently. '
@@ -13,9 +14,12 @@ const mAppInfo = '$mAppName Introducing the latest, cooking recipe app for cooki
     'Give it a spin and a stir, and launch a modern, classic and stunning food recipe app using this Recipe App.';
 //region URLs & Keys
 
-const iqonicURL = 'https://codecanyon.net/user/iqonicdesign/portfolio?direction=desc&order_by=sortable_at&view=grid';
-const helpSupport = 'https://wordpress.iqonic.design/docs/product/ricetta/help-and-support/';
-const PrivacyPolicy = 'https://wordpress.iqonic.design/docs/product/ricetta/privacy-policy/';
+const iqonicURL =
+    'https://codecanyon.net/user/iqonicdesign/portfolio?direction=desc&order_by=sortable_at&view=grid';
+const helpSupport =
+    'https://wordpress.iqonic.design/docs/product/ricetta/help-and-support/';
+const PrivacyPolicy =
+    'https://wordpress.iqonic.design/docs/product/ricetta/privacy-policy/';
 
 const NotAuthorisedMsg = 'You are not admin';
 
