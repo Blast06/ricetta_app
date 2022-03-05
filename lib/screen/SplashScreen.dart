@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:recipe_app/database/DatabaseHelper.dart';
 import 'package:recipe_app/main.dart';
@@ -10,16 +11,20 @@ import 'package:recipe_app/utils/Colors.dart';
 import 'package:recipe_app/utils/Common.dart';
 import 'package:recipe_app/utils/Constants.dart';
 
+import '../utils/SplashController.dart';
+
 class SplashScreen extends StatefulWidget {
   @override
   SplashScreenState createState() => SplashScreenState();
 }
 
 class SplashScreenState extends State<SplashScreen> {
+  final sp = Get.put(SplashController());
+
   @override
   void initState() {
     super.initState();
-    init();
+    // init();
   }
 
   Future<void> init() async {
@@ -55,7 +60,8 @@ class SplashScreenState extends State<SplashScreen> {
         children: [
           Image.asset(appLogo, height: 120),
           16.height,
-          Text(mAppName, style: boldTextStyle(size: 20, fontFamily: fontFamilyGloria)),
+          Text(mAppName,
+              style: boldTextStyle(size: 20, fontFamily: fontFamilyGloria)),
         ],
       ).center(),
     );
