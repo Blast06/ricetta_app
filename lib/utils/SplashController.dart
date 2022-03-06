@@ -4,6 +4,7 @@ import 'package:logger/logger.dart';
 import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 import 'package:nb_utils/nb_utils.dart';
+import 'package:recipe_app/main.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'AdmobController.dart';
 import 'package:recipe_app/screen/DashboardScreen.dart';
@@ -14,7 +15,6 @@ import 'package:recipe_app/utils/Common.dart';
 import 'package:recipe_app/utils/Constants.dart';
 
 class SplashController extends GetxController {
-  final admob = Get.find<AdmobController>();
   Logger log = Logger();
 
   bool showInterstitial = false;
@@ -22,11 +22,17 @@ class SplashController extends GetxController {
   @override
   void onReady() async {
     log.i("onReady of splash controller");
-    await admob.loadOpenad();
+    var admob;
+    if (isMobile) {
+      admob = Get.find<AdmobController>();
+      await admob.loadOpenad();
+    }
     super.onReady();
 
     await Future.delayed(Duration(seconds: 3), () async {
-      admob.showAppOpen();
+      if (isMobile) {
+        admob.showAppOpen();
+      }
 
       //TODO: HERE GOES THE LOGIC FOR WHICH PAGE TO SHOW...
 
@@ -36,16 +42,17 @@ class SplashController extends GetxController {
       await Future.delayed(Duration(seconds: 2));
 
       if (getBoolAsync(IS_FIRST_TIME, defaultValue: true) && isMobile) {
-        WalkThroughScreen().launch(context, isNewTask: true);
+        // WalkThroughScreen().launch(context, isNewTask: true);
+        Get.off(() => WalkThroughScreen(), transition: Transition.zoom);
       } else {
         if (isWeb) {
-          DashboardWebScreen().launch(context, isNewTask: true);
+          // DashboardWebScreen().launch(context, isNewTask: true);
+          Get.off(() => DashboardWebScreen(), transition: Transition.zoom);
         } else {
-          DashboardScreen().launch(context, isNewTask: true);
+          // DashboardScreen().launch(context, isNewTask: true);
+          Get.off(() => DashboardScreen(), transition: Transition.zoom);
         }
       }
-
-      Get.off(() => StartPage(), transition: Transition.zoom);
     });
   }
 

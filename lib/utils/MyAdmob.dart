@@ -1,6 +1,6 @@
 import 'dart:io';
 
-const TEST = false;
+const TEST = true;
 
 class MyAdmob {
   //TEST

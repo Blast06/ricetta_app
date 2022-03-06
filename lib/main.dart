@@ -4,8 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:get/get.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:recipe_app/AppTheme.dart';
 import 'package:recipe_app/local/BaseLanguage.dart';
@@ -17,9 +16,11 @@ import 'package:recipe_app/utils/Colors.dart';
 import 'package:recipe_app/utils/Common.dart';
 import 'package:recipe_app/utils/Constants.dart';
 import 'package:sqflite/sqflite.dart';
-
+import 'package:native_admob_flutter/native_admob_flutter.dart';
 import 'local/AppLocalizations.dart';
 import 'models/RecipeStaticModel.dart';
+import 'utils/AdmobController.dart';
+import 'utils/MyAdmob.dart';
 
 AppStore appStore = AppStore();
 late Database database;
@@ -45,7 +46,15 @@ void main() async {
 
   if (isMobile) {
     await Firebase.initializeApp();
-    await MobileAds.instance.initialize();
+    await MobileAds.initialize(
+      bannerAdUnitId: MyAdmob.getBannerAdId(),
+      interstitialAdUnitId: MyAdmob.getInterstitialAdId(),
+      appOpenAdUnitId: MyAdmob.getOpenAdId(),
+    );
+    // await MobileAds.instance.initialize();
+    await MobileAds.requestTrackingAuthorization();
+
+    Get.put(AdmobController());
   }
 
   defaultRadius = 16.0;
