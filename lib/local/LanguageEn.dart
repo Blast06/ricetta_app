@@ -1,5 +1,6 @@
 import 'package:recipe_app/local/BaseLanguage.dart';
 
+//TODO: IMPLEMENT TRANSLATION FROM HERE
 class LanguageEn extends BaseLanguage {
   @override
   String get startCooking => 'Start Cooking';
@@ -20,7 +21,8 @@ class LanguageEn extends BaseLanguage {
   String get dark => 'Dark';
 
   @override
-  String get passwordLengthShouldBeMoreThan => 'Password length should be more than 8';
+  String get passwordLengthShouldBeMoreThan =>
+      'Password length should be more than 8';
 
   @override
   String get yourInterNetNotWorking => 'Your internet is not working';
@@ -47,7 +49,8 @@ class LanguageEn extends BaseLanguage {
   String get cuisineData => 'CUISINE';
 
   @override
-  String get ingredientUpdate => 'Recipe Ingredients has been update successfully';
+  String get ingredientUpdate =>
+      'Recipe Ingredients has been update successfully';
 
   @override
   String get slider => 'Slider';
@@ -92,7 +95,8 @@ class LanguageEn extends BaseLanguage {
   String get addSliderSucessfully => 'Add Slider Sucessfully';
 
   @override
-  String get ratingDeletedSuccessfully => 'Rating has been deleted successfully';
+  String get ratingDeletedSuccessfully =>
+      'Rating has been deleted successfully';
 
   @override
   String get doYouDeleteYourRating => 'Do you want to delete your rating?';
@@ -140,7 +144,8 @@ class LanguageEn extends BaseLanguage {
   String get deleteThisRecipe => 'Do you want to delete this recipe?';
 
   @override
-  String get deletedRecipeSuccessfully => 'Recipe has been deleted successfully';
+  String get deletedRecipeSuccessfully =>
+      'Recipe has been deleted successfully';
 
   @override
   String get publishSuccessfully => 'Recipe Publish Successfully';
@@ -176,7 +181,8 @@ class LanguageEn extends BaseLanguage {
   String get recipeSaved => 'Recipe Ingredients has been save successfully';
 
   @override
-  String get recipeDeleted => 'Recipe Ingredients has been deleted successfully';
+  String get recipeDeleted =>
+      'Recipe Ingredients has been deleted successfully';
 
   @override
   String get adminSetting => 'Admin Setting';
@@ -395,7 +401,8 @@ class LanguageEn extends BaseLanguage {
   String get sureYouWantCuisine => 'Sure you want to remove this Cuisine?';
 
   @override
-  String get cuisineHasBeenDeletedSuccessfully => 'Cuisine has been deleted successfully';
+  String get cuisineHasBeenDeletedSuccessfully =>
+      'Cuisine has been deleted successfully';
 
   @override
   String get ourLatestRecipes => 'Our Latest Recipes';
@@ -449,7 +456,8 @@ class LanguageEn extends BaseLanguage {
   String get noComments => 'No Comments';
 
   @override
-  String get ratingHasBeenSaveSuccessfully => 'Rating has been save successfully';
+  String get ratingHasBeenSaveSuccessfully =>
+      'Rating has been save successfully';
 
   @override
   String get recipeReview => 'Recipe Review';
@@ -461,7 +469,8 @@ class LanguageEn extends BaseLanguage {
   String get pleaseSubmitYourReview => 'Please submit your review';
 
   @override
-  String get yourRecipeIsNotSavedYet => 'Your recipe is not saved yet. Your data will be lost.';
+  String get yourRecipeIsNotSavedYet =>
+      'Your recipe is not saved yet. Your data will be lost.';
 
   @override
   String get okGoBack => 'Ok, Go Back';
@@ -494,7 +503,8 @@ class LanguageEn extends BaseLanguage {
   String get choiceBetweenServing => 'Choice between serving';
 
   @override
-  String get howMakingTheDish => 'How much time do you activity spend making the dish?';
+  String get howMakingTheDish =>
+      'How much time do you activity spend making the dish?';
 
   @override
   String get howBakeFor => 'How long does the dish to bake for?';
@@ -554,7 +564,8 @@ class LanguageEn extends BaseLanguage {
   String get deleteThisStep => 'Do you want to delete this Step??';
 
   @override
-  String get deleteThisRecipeStep => 'Recipe Step has been deleted successfully';
+  String get deleteThisRecipeStep =>
+      'Recipe Step has been deleted successfully';
 
   @override
   String get stepUpdateSuccessfully => 'Step  has been update successfully';
@@ -578,7 +589,8 @@ class LanguageEn extends BaseLanguage {
   String get addAUtensil => 'Add a utensil';
 
   @override
-  String get egOriginalRecipe => 'e.g. - This is my favorite dessert and my Grandma\'s original recipe.';
+  String get egOriginalRecipe =>
+      'e.g. - This is my favorite dessert and my Grandma\'s original recipe.';
 
   @override
   String get addUtensil => 'Add Utensil';
@@ -590,10 +602,12 @@ class LanguageEn extends BaseLanguage {
   String get demoUserMsg => 'Tester role not allowed to perform this action';
 
   @override
-  String get sliderHasBeenUpdatedSuccessfully => 'Slider has been updated successfully';
+  String get sliderHasBeenUpdatedSuccessfully =>
+      'Slider has been updated successfully';
 
   @override
-  String get sliderHasBeenSaveSuccessfully => 'Slider has been save successfully';
+  String get sliderHasBeenSaveSuccessfully =>
+      'Slider has been save successfully';
 
   @override
   String get unpublished => 'Unpublished';
