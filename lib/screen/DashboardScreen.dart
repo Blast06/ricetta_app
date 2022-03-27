@@ -30,6 +30,7 @@ class DashboardScreenState extends State<DashboardScreen> {
   int currentIndex = 0;
 
   int value = 0;
+
   DateTime? currentBackPressTime;
 
   List<Widget> page = [
@@ -50,7 +51,8 @@ class DashboardScreenState extends State<DashboardScreen> {
     await 1.seconds.delay;
     //region System Mode
     if (getIntAsync(THEME_MODE_INDEX) == ThemeModeSystem) {
-      appStore.setDarkMode(MediaQuery.of(context).platformBrightness == Brightness.dark);
+      appStore.setDarkMode(
+          MediaQuery.of(context).platformBrightness == Brightness.dark);
     }
 
     window.onPlatformBrightnessChanged = () async {
@@ -71,7 +73,8 @@ class DashboardScreenState extends State<DashboardScreen> {
     return WillPopScope(
       onWillPop: () {
         DateTime now = DateTime.now();
-        if (currentBackPressTime == null || now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
+        if (currentBackPressTime == null ||
+            now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
           currentBackPressTime = now;
           toast('Press back again to exit app');
           return Future.value(false);
@@ -97,7 +100,8 @@ class DashboardScreenState extends State<DashboardScreen> {
             if (index == 2 && (!appStore.isAdmin || !appStore.isDemoAdmin)) {
               //toast(NotAuthorisedMsg);
             }
-            if ((index == 2 || index == 3 || index == 4) && (!getBoolAsync(IS_LOGGED_IN))) {
+            if ((index == 2 || index == 3 || index == 4) &&
+                (!getBoolAsync(IS_LOGGED_IN))) {
               SignInScreen().launch(context);
             } else {
               currentSwitchCount++;
@@ -107,8 +111,9 @@ class DashboardScreenState extends State<DashboardScreen> {
                 currentSwitchCount = 0;
               }
 
-              if ((appStore.isAdmin || appStore.isDemoAdmin) && index == 2) {
-                Navigator.of(context).push(createRoute(widget: NewRecipeScreen()));
+              if (index == 2) {
+                Navigator.of(context)
+                    .push(createRoute(widget: NewRecipeScreen()));
               } else {
                 value = index;
               }
@@ -116,12 +121,31 @@ class DashboardScreenState extends State<DashboardScreen> {
             }
           },
           items: [
-            BottomNavigationBarItem(icon: Image.asset('images/ic_home.png', width: 20), label: '', activeIcon: Image.asset('images/ic_home_active.png', width: 20)),
-            BottomNavigationBarItem(icon: Image.asset('images/ic_search.png', width: 16), label: '', activeIcon: Image.asset('images/ic_search_active.png', width: 20)),
-            if (appStore.isAdmin || appStore.isDemoAdmin)
-              BottomNavigationBarItem(icon: Image.asset('images/ic_add.png', width: 20), label: '', activeIcon: Image.asset('images/ic_add.png', width: 20)),
-            BottomNavigationBarItem(icon: Image.asset('images/ic_shopping.png', width: 20), label: '', activeIcon: Image.asset('images/ic_shopping_active.png', width: 20)),
-            BottomNavigationBarItem(icon: Image.asset('images/ic_profile.png', width: 20), label: '', activeIcon: Image.asset('images/ic_profile_active.png', width: 16)),
+            BottomNavigationBarItem(
+                icon: Image.asset('images/ic_home.png', width: 20),
+                label: '',
+                activeIcon:
+                    Image.asset('images/ic_home_active.png', width: 20)),
+            BottomNavigationBarItem(
+                icon: Image.asset('images/ic_search.png', width: 16),
+                label: '',
+                activeIcon:
+                    Image.asset('images/ic_search_active.png', width: 20)),
+            // if (appStore.isAdmin || appStore.isDemoAdmin)
+            BottomNavigationBarItem(
+                icon: Image.asset('images/ic_add.png', width: 20),
+                label: '',
+                activeIcon: Image.asset('images/ic_add.png', width: 20)),
+            BottomNavigationBarItem(
+                icon: Image.asset('images/ic_shopping.png', width: 20),
+                label: '',
+                activeIcon:
+                    Image.asset('images/ic_shopping_active.png', width: 20)),
+            BottomNavigationBarItem(
+                icon: Image.asset('images/ic_profile.png', width: 20),
+                label: '',
+                activeIcon:
+                    Image.asset('images/ic_profile_active.png', width: 16)),
           ],
         ),
       ),
