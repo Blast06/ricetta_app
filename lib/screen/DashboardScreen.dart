@@ -36,7 +36,7 @@ class DashboardScreenState extends State<DashboardScreen> {
   List<Widget> page = [
     HomeFragment(),
     SearchFragment(),
-    if (appStore.isAdmin || appStore.isDemoAdmin) SizedBox(),
+    SizedBox(),
     ShoppingListFragment(),
     ProfileFragment(),
   ];
@@ -100,6 +100,8 @@ class DashboardScreenState extends State<DashboardScreen> {
             if (index == 2 && (!appStore.isAdmin || !appStore.isDemoAdmin)) {
               //toast(NotAuthorisedMsg);
             }
+
+            //verify if user is logged in to show pages that requires user's auth
             if ((index == 2 || index == 3 || index == 4) &&
                 (!getBoolAsync(IS_LOGGED_IN))) {
               SignInScreen().launch(context);
@@ -110,6 +112,10 @@ class DashboardScreenState extends State<DashboardScreen> {
                 indexStackKey = UniqueKey();
                 currentSwitchCount = 0;
               }
+              // if (index == 4) {
+              //   Navigator.of(context)
+              //       .push(createRoute(widget: ProfileFragment()));
+              // }
 
               if (index == 2) {
                 Navigator.of(context)
@@ -117,7 +123,10 @@ class DashboardScreenState extends State<DashboardScreen> {
               } else {
                 value = index;
               }
-              setState(() {});
+
+              setState(() {
+                print(index);
+              });
             }
           },
           items: [

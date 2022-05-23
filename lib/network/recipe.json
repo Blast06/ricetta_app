@@ -1,0 +1,84 @@
+{
+    "status": true,
+    "slider": [],
+    "latestRecipe": [
+        {
+            "id": 2,
+            "title": "Receta De Pollo",
+            "portion_unit": 1,
+            "portion_type": "Pieces",
+            "difficulty": "Medium",
+            "preparation_time": "01:04",
+            "baking_time": "00:14",
+            "resting_time": "00:00",
+            "dish_type": "Main",
+            "cuisine": "American",
+            "status": 0,
+            "user_id": 3,
+            "is_like": 0,
+            "is_bookmark": 0,
+            "total_review": 0,
+            "total_rating": 0,
+            "recipe_image": "http:\/\/localhost\/storage\/3\/image_picker5834241295583638354.jpg",
+            "like_count": 0
+        },
+        {
+            "id": 1,
+            "title": "gdfsgfdsgfds",
+            "portion_unit": 1,
+            "portion_type": "Pieces",
+            "difficulty": "Medium",
+            "preparation_time": "03:07",
+            "baking_time": "00:03",
+            "resting_time": "00:03",
+            "dish_type": "Dessert",
+            "cuisine": "American",
+            "status": 1,
+            "user_id": 3,
+            "is_like": 0,
+            "is_bookmark": 0,
+            "total_review": 0,
+            "total_rating": 0,
+            "recipe_image": "http:\/\/localhost\/storage\/2\/.jpg",
+            "like_count": 0
+        }
+    ],
+    "category": [
+        {
+            "id": 1,
+            "name": "Stater",
+            "status": 1,
+            "category_image": "http:\/\/45.77.195.98\/images\/default.png"
+        },
+        {
+            "id": 2,
+            "name": "Snack",
+            "status": 1,
+            "category_image": "http:\/\/45.77.195.98\/images\/default.png"
+        },
+        {
+            "id": 3,
+            "name": "Breakfast",
+            "status": 1,
+            "category_image": "http:\/\/45.77.195.98\/images\/default.png"
+        },
+        {
+            "id": 4,
+            "name": "Main",
+            "status": 1,
+            "category_image": "http:\/\/45.77.195.98\/images\/default.png"
+        },
+        {
+            "id": 5,
+            "name": "Dessert",
+            "status": 1,
+            "category_image": "http:\/\/45.77.195.98\/images\/default.png"
+        },
+        {
+            "id": 6,
+            "name": "Drink",
+            "status": 1,
+            "category_image": "http:\/\/45.77.195.98\/images\/default.png"
+        }
+    ]
+}
